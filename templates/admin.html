@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin dashboard | QuickBite{% endblock %}
+
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow dark">MANAGEMENT</p>
+
+  <h1>Admin dashboard</h1>
+
+  <p>
+    Manage the QuickBite menu and monitor customer orders.
+  </p>
+</section>
+
+<div class="admin-grid">
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow dark">MENU</p>
+        <h2>Add a menu item</h2>
+      </div>
+    </div>
+
+    <form
+      class="form"
+      method="post"
+      action="{{ url_for('main.add_menu_item') }}"
+    >
+      <label>
+        Name
+        <input
+          name="name"
+          placeholder="e.g. Chicken Rice Bowl"
+          required
+        >
+      </label>
+
+      <label>
+        Description
+        <input
+          name="description"
+          placeholder="Short description"
+          required
+        >
+      </label>
+
+      <div class="form-row">
+        <label>
+          Category
+          <input
+            name="category"
+            placeholder="Main Course"
+            required
+          >
+        </label>
+
+        <label>
+          Price
+          <input
+            name="price"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="0.00"
+            required
+          >
+        </label>
+      </div>
+
+      <label>
+        Image URL
+        <span class="muted">optional</span>
+        <input
+          name="image_url"
+          placeholder="https://..."
+        >
+      </label>
+
+      <button class="button button-primary" type="submit">
+        Add menu item
+        <span>+</span>
+      </button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow dark">CURRENT MENU</p>
+        <h2>Available items</h2>
+      </div>
+
+      <span class="count-badge">
+        {{ items|length }}
+      </span>
+    </div>
+
+    <div class="admin-list">
+      {% for item in items %}
+        <div class="admin-row">
+          <div>
+            <strong>{{ item['name'] }}</strong>
+            <small>
+              {{ item['category'] }} · ₱{{ '%.2f'|format(item['price']) }}
+            </small>
+          </div>
+
+          <form
+            method="post"
+            action="{{ url_for('main.delete_menu_item', item_id=item['id']) }}"
+          >
+            <button class="button button-danger" type="submit">
+              Remove
+            </button>
+          </form>
+        </div>
+      {% else %}
+        <p class="muted">No items available.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<section class="panel orders-panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow dark">ORDER MANAGEMENT</p>
+      <h2>Customer orders</h2>
+    </div>
+
+    <span class="count-badge">
+      {{ orders|length }}
+    </span>
+  </div>
+
+  <div class="admin-orders">
+    {% for order in orders %}
+      <div class="admin-order-row">
+        <div>
+          <strong>Order #{{ order['id'] }}</strong>
+
+          <small>
+            {{ order['username'] }} ·
+            ₱{{ '%.2f'|format(order['total']) }} ·
+            {{ order['created_at'] }}
+          </small>
+        </div>
+
+        <form
+          class="status-form"
+          method="post"
+          action="{{ url_for('main.update_order_status', order_id=order['id']) }}"
+        >
+          <select name="status">
+            <option {% if order['status'] == 'Pending' %}selected{% endif %}>
+              Pending
+            </option>
+
+            <option {% if order['status'] == 'Preparing' %}selected{% endif %}>
+              Preparing
+            </option>
+
+            <option {% if order['status'] == 'Ready' %}selected{% endif %}>
+              Ready
+            </option>
+
+            <option {% if order['status'] == 'Completed' %}selected{% endif %}>
+              Completed
+            </option>
+
+            <option {% if order['status'] == 'Cancelled' %}selected{% endif %}>
+              Cancelled
+            </option>
+          </select>
+
+          <button class="button button-secondary" type="submit">
+            Update
+          </button>
+        </form>
+      </div>
+    {% else %}
+      <p class="muted">
+        No orders have been placed yet.
+      </p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

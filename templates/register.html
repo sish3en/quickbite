@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Create account | QuickBite{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-intro">
+    <p class="eyebrow dark">JOIN QUICKBITE</p>
+
+    <h1>Your next meal starts here.</h1>
+
+    <p>
+      Create an account to place orders and follow their progress.
+    </p>
+  </div>
+
+  <div class="form-card">
+    <h2>Create account</h2>
+
+    <p class="muted">
+      It only takes a moment.
+    </p>
+
+    <form class="form" method="post">
+      <label>
+        Username
+        <input
+          name="username"
+          minlength="3"
+          autocomplete="username"
+          required
+        >
+      </label>
+
+      <label>
+        Password
+        <input
+          type="password"
+          name="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+        >
+      </label>
+
+      <button class="button button-primary" type="submit">
+        Create account
+        <span>→</span>
+      </button>
+    </form>
+
+    <p class="form-footer">
+      Already registered?
+      <a href="{{ url_for('main.login') }}">
+        Log in
+      </a>
+    </p>
+  </div>
+</section>
+{% endblock %}

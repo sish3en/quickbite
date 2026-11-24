@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Your cart | QuickBite{% endblock %}
+
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow dark">YOUR ORDER</p>
+
+  <h1>Shopping cart</h1>
+
+  <p>
+    Review your items before checking out.
+  </p>
+</section>
+
+{% if items %}
+  <div class="cart-layout">
+    <form class="cart-list" method="post">
+      {% for item, quantity in items %}
+        <article class="cart-item">
+          <div class="cart-thumb">
+            {{ item['name'][0] }}
+          </div>
+
+          <div class="cart-info">
+            <h3>{{ item['name'] }}</h3>
+            <p>{{ item['description'] }}</p>
+            <strong>₱{{ '%.2f'|format(item['price']) }}</strong>
+          </div>
+
+          <label class="quantity">
+            Qty
+            <input
+              type="number"
+              name="quantity_{{ item['id'] }}"
+              value="{{ quantity }}"
+              min="0"
+              max="99"
+            >
+          </label>
+        </article>
+      {% endfor %}
+
+      <button class="button button-secondary" type="submit">
+        Update cart
+      </button>
+    </form>
+
+    <aside class="summary-card">
+      <p class="eyebrow dark">ORDER SUMMARY</p>
+
+      <div class="summary-line">
+        <span>Items</span>
+        <span>{{ cart_count }}</span>
+      </div>
+
+      <div class="summary-total">
+        <span>Total</span>
+        <strong>₱{{ '%.2f'|format(total) }}</strong>
+      </div>
+
+      <form method="post" action="{{ url_for('main.checkout') }}">
+        <button class="button button-primary full" type="submit">
+          Place order
+          <span>→</span>
+        </button>
+      </form>
+
+      <p class="summary-note">
+        You can review your order status after checkout.
+      </p>
+    </aside>
+  </div>
+{% else %}
+  <div class="empty-state large">
+    <h3>Your cart is waiting.</h3>
+
+    <p>
+      Add something delicious from the menu to get started.
+    </p>
+
+    <a class="button button-primary" href="{{ url_for('main.index') }}">
+      Browse menu
+      <span>→</span>
+    </a>
+  </div>
+{% endif %}
+{% endblock %}

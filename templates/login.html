@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Log in | QuickBite{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-intro">
+    <p class="eyebrow dark">WELCOME BACK</p>
+
+    <h1>Good to see you again.</h1>
+
+    <p>
+      Log in to continue your order and keep track of your meals.
+    </p>
+  </div>
+
+  <div class="form-card">
+    <h2>Log in</h2>
+
+    <p class="muted">
+      Enter your account details below.
+    </p>
+
+    <form class="form" method="post">
+      <label>
+        Username
+        <input
+          name="username"
+          autocomplete="username"
+          required
+        >
+      </label>
+
+      <label>
+        Password
+        <input
+          type="password"
+          name="password"
+          autocomplete="current-password"
+          required
+        >
+      </label>
+
+      <button class="button button-primary" type="submit">
+        Log in
+        <span>→</span>
+      </button>
+    </form>
+
+    <p class="form-footer">
+      New to QuickBite?
+      <a href="{{ url_for('main.register') }}">
+        Create an account
+      </a>
+    </p>
+  </div>
+</section>
+{% endblock %}

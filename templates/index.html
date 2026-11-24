@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Menu | QuickBite{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">FRESHLY MADE FOR YOU</p>
+
+    <h1>
+      Good food,<br>
+      <em>easy ordering.</em>
+    </h1>
+
+    <p class="hero-text">
+      Discover satisfying meals, build your order, and enjoy a smoother way to eat.
+    </p>
+
+    <a class="button button-light" href="#menu">
+      Explore the menu
+      <span>→</span>
+    </a>
+  </div>
+
+  <div class="hero-art">
+    <div class="hero-circle">
+      <span>Q</span>
+    </div>
+
+    <div class="hero-card hero-card-top">
+      Made with care <strong>●</strong>
+    </div>
+
+    <div class="hero-card hero-card-bottom">
+      Your next favorite meal
+    </div>
+  </div>
+</section>
+
+<section class="section-heading" id="menu">
+  <div>
+    <p class="eyebrow dark">OUR MENU</p>
+    <h2>Choose what sounds good</h2>
+  </div>
+
+  <p class="section-subtitle">
+    Simple choices, delicious results.
+  </p>
+</section>
+
+<div class="filters">
+  <a class="filter-pill active" href="{{ url_for('main.index') }}">
+    All items
+  </a>
+
+  {% for category in categories %}
+    <a
+      class="filter-pill"
+      href="{{ url_for('main.index', category=category.category) }}"
+    >
+      {{ category.category }}
+    </a>
+  {% endfor %}
+</div>
+
+<section class="grid">
+  {% for item in items %}
+    <article class="card">
+      <div
+        class="card-media {% if item.image_url %}has-image{% endif %}"
+        {% if item.image_url %}
+          style="background-image: url('{{ item.image_url }}');"
+        {% endif %}
+      >
+        {% if not item.image_url %}
+          <span>{{ item.name[0] }}</span>
+        {% endif %}
+
+        <small>{{ item.category }}</small>
+      </div>
+
+      <div class="card-body">
+        <div class="card-title-row">
+          <h3>{{ item.name }}</h3>
+          <strong>₱{{ '%.2f'|format(item.price) }}</strong>
+        </div>
+
+        <p>{{ item.description }}</p>
+
+        <form
+          method="post"
+          action="{{ url_for('main.add_to_cart', item_id=item.id) }}"
+        >
+          <button class="button button-primary" type="submit">
+            Add to order
+            <span>+</span>
+          </button>
+        </form>
+      </div>
+    </article>
+  {% else %}
+    <div class="empty-state">
+      <h3>No menu items available</h3>
+      <p>Please check back later.</p>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

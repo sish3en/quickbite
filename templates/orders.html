@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}My orders | QuickBite{% endblock %}
+
+{% block content %}
+<section class="page-heading compact">
+  <p class="eyebrow dark">ORDER HISTORY</p>
+
+  <h1>My orders</h1>
+
+  <p>
+    Keep track of your recent QuickBite orders.
+  </p>
+</section>
+
+{% for order in orders %}
+  <article class="order-card">
+    <div class="order-number">
+      <span class="order-icon">#</span>
+
+      <div>
+        <strong>Order #{{ order['id'] }}</strong>
+        <small>{{ order['created_at'] }}</small>
+      </div>
+    </div>
+
+    <div class="order-detail">
+      <small>Total</small>
+      <strong>₱{{ '%.2f'|format(order['total']) }}</strong>
+    </div>
+
+    <span class="status status-{{ order['status']|lower }}">
+      {{ order['status'] }}
+    </span>
+  </article>
+{% else %}
+  <div class="empty-state large">
+    <h3>No orders yet.</h3>
+
+    <p>
+      Your completed orders will appear here.
+    </p>
+
+    <a class="button button-primary" href="{{ url_for('main.index') }}">
+      Explore menu
+      <span>→</span>
+    </a>
+  </div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Discover meals | QuickBite{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow dark">MEAL DISCOVERY</p>
+
+  <h1>Find your next favorite.</h1>
+
+  <p>
+    Search meal ideas using our connected food-information service.
+  </p>
+</section>
+
+<form class="search-bar" method="get">
+  <input
+    name="q"
+    value="{{ query }}"
+    placeholder="Try chicken, pasta, or curry"
+    required
+  >
+
+  <button class="button button-primary" type="submit">
+    Search
+    <span>⌕</span>
+  </button>
+</form>
+
+{% if query %}
+  <div class="results-label">
+    Results for <strong>“{{ query }}”</strong>
+  </div>
+{% endif %}
+
+<section class="grid">
+  {% for meal in meals %}
+    <article class="card">
+      <div
+        class="card-media has-image"
+        style="background-image: url('{{ meal.strMealThumb }}')"
+      >
+        <small>{{ meal.strCategory or 'Meal' }}</small>
+      </div>
+
+      <div class="card-body">
+        <h3>{{ meal.strMeal }}</h3>
+        <p>{{ meal.strArea or 'Discover a new meal idea.' }}</p>
+      </div>
+    </article>
+  {% else %}
+    {% if query %}
+      <div class="empty-state">
+        <h3>No meals found</h3>
+        <p>Try a different search term.</p>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h3>Search the meal collection</h3>
+        <p>Enter a meal name above to begin.</p>
+      </div>
+    {% endif %}
+  {% endfor %}
+</section>
+{% endblock %}
